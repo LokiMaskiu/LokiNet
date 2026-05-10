@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>LokiNet</title>
+
+    <link rel="icon" href="/static/favicon.ico">
+
+    <style>
+
+        body{
+            margin:0;
+            background:#121212;
+            font-family:Arial;
+            color:white;
+        }
+
+        /* NAVBAR */
+
+        .navbar{
+            background:#1f1f1f;
+            padding:20px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            box-shadow:0px 0px 10px black;
+        }
+
+        .logo{
+            font-size:28px;
+            font-weight:bold;
+            color:#4CAF50;
+        }
+
+        .menu a{
+            color:white;
+            text-decoration:none;
+            margin-left:20px;
+            font-size:18px;
+        }
+
+        .menu a:hover{
+            color:#4CAF50;
+        }
+
+        /* ORTA KISIM */
+
+        .orta{
+            text-align:center;
+            margin-top:120px;
+        }
+
+        .orta h1{
+            font-size:50px;
+        }
+
+        .orta p{
+            font-size:20px;
+            color:#cccccc;
+        }
+
+        .buton{
+            display:inline-block;
+            margin-top:30px;
+            padding:15px 30px;
+            background:#4CAF50;
+            color:white;
+            text-decoration:none;
+            border-radius:10px;
+            font-size:18px;
+        }
+
+        .buton:hover{
+            background:#45a049;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <div class="navbar">
+
+        <div class="logo">
+            LokiNet
+        </div>
+
+        <div class="menu">
+
+            <a href="/">
+                Ana Sayfa
+            </a>
+
+            {% if kullanici %}
+
+            <a href="/panel">
+                Panel
+            </a>
+
+            <a href="/logout">
+                Çıkış Yap
+            </a>
+
+            {% else %}
+
+            <a href="/login">
+                Giriş Yap
+            </a>
+
+            <a href="/register">
+                Kayıt Ol
+            </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <!-- ANA İÇERİK -->
+
+    <div class="orta">
+
+        <h1>
+            LokiNet'e Hoş Geldin
+        </h1>
+
+        <p>
+            Flask ile geliştirilmiş modern kullanıcı sistemi
+        </p>
+
+        {% if kullanici %}
+
+        <h2>
+            Hoş geldin {{ kullanici }}
+        </h2>
+
+        <a class="buton" href="/panel">
+            Panele Git
+        </a>
+
+        {% else %}
+
+        <a class="buton" href="/register">
+            Hemen Başla
+        </a>
+
+        {% endif %}
+
+    </div>
+
+</body>
+
+</html>

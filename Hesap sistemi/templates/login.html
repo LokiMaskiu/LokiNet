@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Login</title>
+
+<style>
+
+body{
+    background:#121212;
+    font-family:Arial;
+    color:white;
+}
+
+.kutu{
+    width:350px;
+    margin:100px auto;
+    background:#1f1f1f;
+    padding:40px;
+    border-radius:15px;
+    text-align:center;
+}
+
+input{
+    width:90%;
+    padding:12px;
+    margin-top:15px;
+    border:none;
+    border-radius:10px;
+}
+
+button{
+    width:95%;
+    padding:12px;
+    margin-top:20px;
+    border:none;
+    border-radius:10px;
+    background:#4CAF50;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#45a049;
+}
+
+a{
+    color:#4CAF50;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="kutu">
+
+<h1>Giriş Yap</h1>
+
+<form action="/login" method="POST">
+
+<input
+type="text"
+name="kullanici"
+placeholder="Kullanıcı Adı"
+>
+
+<input
+type="password"
+name="sifre"
+placeholder="Şifre"
+>
+
+<button type="submit">
+Giriş Yap
+</button>
+
+</form>
+
+<br>
+
+<a href="/register">
+Kayıt Ol
+</a>
+
+<p>{{ hata }}</p>
+
+</div>
+
+</body>
+
+</html>

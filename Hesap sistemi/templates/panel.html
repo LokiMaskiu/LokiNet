@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Panel</title>
+
+    <style>
+
+        body{
+            background:#1e1e1e;
+            color:white;
+            font-family:Arial;
+            text-align:center;
+        }
+
+        .kutu{
+            width:400px;
+            background:#2d2d2d;
+            margin:100px auto;
+            padding:40px;
+            border-radius:15px;
+            box-shadow:0px 0px 15px black;
+        }
+
+        a{
+            display:block;
+            text-decoration:none;
+            color:white;
+            padding:12px;
+            margin-top:15px;
+            border-radius:10px;
+        }
+
+        .sil{
+            background:#e53935;
+        }
+
+        .sil:hover{
+            background:#c62828;
+        }
+
+        .anasayfa{
+            background:#4CAF50;
+        }
+
+        .anasayfa:hover{
+            background:#45a049;
+        }
+
+        .cikis{
+            background:#2196F3;
+        }
+
+        .cikis:hover{
+            background:#1976D2;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="kutu">
+
+        <h1>
+            Hoş Geldin {{ kullanici }}
+        </h1>
+
+        <a
+            class="sil"
+            href="/delete/{{ kullanici }}"
+        >
+            Hesabı Sil
+        </a>
+
+        <a
+            class="anasayfa"
+            href="/"
+        >
+            Ana Sayfa
+        </a>
+
+        <a
+            class="cikis"
+            href="/logout"
+        >
+            Çıkış Yap
+        </a>
+
+    </div>
+
+</body>
+
+</html>

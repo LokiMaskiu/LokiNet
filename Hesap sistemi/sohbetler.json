@@ -1,0 +1,94 @@
+{
+    "Loki_Maskiu": [
+        {
+            "sender": "user",
+            "text": "naber"
+        },
+        {
+            "sender": "loki",
+            "text": "Cevap al\u0131namad\u0131"
+        },
+        {
+            "sender": "user",
+            "text": "1+1"
+        },
+        {
+            "sender": "loki",
+            "text": "Cevap al\u0131namad\u0131"
+        },
+        {
+            "sender": "user",
+            "text": "1+1 ka\u00e7 eder"
+        },
+        {
+            "sender": "loki",
+            "text": "AI cevap \u00fcretemedi"
+        },
+        {
+            "sender": "user",
+            "text": "1+1 ka\u00e7 eder"
+        },
+        {
+            "sender": "loki",
+            "text": "API HATA: API key not valid. Please pass a valid API key."
+        },
+        {
+            "sender": "user",
+            "text": "1+1 ka\u00e7 eder"
+        },
+        {
+            "sender": "loki",
+            "text": "API HATA: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods."
+        },
+        {
+            "sender": "user",
+            "text": "naber"
+        },
+        {
+            "sender": "loki",
+            "text": "\u015eu an t\u00fcm AI modelleri \u00e7al\u0131\u015fm\u0131yor. L\u00fctfen daha sonra tekrar dene."
+        },
+        {
+            "sender": "user",
+            "text": "naber"
+        },
+        {
+            "sender": "loki",
+            "text": "T\u00dcM MODELLER BA\u015eARISIZ - TERMINAL LOGLARINI KONTROL ET"
+        },
+        {
+            "sender": "user",
+            "text": "1+1 ka\u00e7 eder"
+        },
+        {
+            "sender": "loki",
+            "text": "T\u00dcM MODELLER BA\u015eARISIZ - TERMINAL LOGLARINI KONTROL ET"
+        }
+    ],
+    "null": [
+        {
+            "sender": "user",
+            "text": "selam"
+        },
+        {
+            "sender": "ai",
+            "text": "Selam! Nas\u0131ls\u0131n?"
+        },
+        {
+            "sender": "user",
+            "text": "iyiyim sen?"
+        },
+        {
+            "sender": "ai",
+            "text": "Te\u015fekk\u00fcr ederim, ben de iyiyim! Sana nas\u0131l yard\u0131mc\u0131 olabilirim?"
+        },
+        {
+            "sender": "user",
+            "text": "while d\u00f6ng\u00fcs\u00fc nedir"
+        },
+        {
+            "sender": "ai",
+            "text": "API HATA: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+        }
+    ]
+}

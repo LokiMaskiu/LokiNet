@@ -1,178 +1,226 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, jsonify, send_from_directory
 import json
 import os
+import requests
 
 app = Flask(__name__)
+app.secret_key = "SABIT_SECRET_KEY_12345"
 
-app.secret_key = "lokinet_secret_key"
+GEMINI_API_KEY = "AQ.Ab8RN6L6w7XIs033luDUU2XIgXl9Gp9bbzdLHFjGmLCzC9pvIg"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+USERS_FILE = os.path.join(BASE_DIR, "users.json")
+CHAT_FILE = os.path.join(BASE_DIR, "chats.json")
 
-DOSYA = os.path.join(BASE_DIR, "veritabani.json")
+# -------------------------
+# FAVICON ROUTE (KESİN ÇÖZÜM)
+# -------------------------
+@app.route("/favicon.ico")
+def favicon():
+    return send_from_directory(
+        os.path.join(app.root_path, "static"),
+        "favicon.ico",
+        mimetype="image/vnd.microsoft.icon"
+    )
 
-# ---------------------------------------------------
-# VERİTABANI OLUŞTUR
-# ---------------------------------------------------
+# -------------------------
+# SAFE LOAD
+# -------------------------
+def load():
+    global users, chats
 
-if os.path.exists(DOSYA):
+    users = {}
+    chats = {}
 
-    with open(DOSYA, "r", encoding="utf-8") as f:
-        kullanicilar = json.load(f)
+    if os.path.exists(USERS_FILE):
+        try:
+            users = json.load(open(USERS_FILE, "r"))
+        except:
+            users = {}
 
-else:
+    if os.path.exists(CHAT_FILE):
+        try:
+            chats = json.load(open(CHAT_FILE, "r"))
+        except:
+            chats = {}
 
-    kullanicilar = {}
+def save():
+    with open(USERS_FILE, "w") as f:
+        json.dump(users, f, indent=4)
 
-    with open(DOSYA, "w", encoding="utf-8") as f:
-        json.dump(kullanicilar, f)
+    with open(CHAT_FILE, "w") as f:
+        json.dump(chats, f, indent=4)
 
-# ---------------------------------------------------
-# KAYDET
-# ---------------------------------------------------
+load()
 
-def kaydet():
+# -------------------------
+# GEMINI AI
+# -------------------------
+def gemini(text):
 
-    with open(DOSYA, "w", encoding="utf-8") as f:
+    system_prompt = """
+Sen LokiAI isimli bir yapay zeka asistanısın.
 
-        json.dump(
-            kullanicilar,
-            f,
-            indent=4,
-            ensure_ascii=False
-        )
+Kurallar:
+- Adın LokiAI'dir.
+- Kendini Gemini veya Google AI olarak tanıtma.
+- "Sen kimsin?" sorusuna "Ben LokiAI'yim." diye cevap ver.
+- "Adın ne?" sorusuna "Ben LokiAI'yim." diye cevap ver.
+- "Geliştiricin kim?" sorusuna "Ben LokiMaskiu tarafından geliştirilen LokiAI'yim." diye cevap ver.
+"""
 
-# ---------------------------------------------------
-# ANA SAYFA
-# ---------------------------------------------------
+    prompt = f"{system_prompt}\n\nKullanıcı: {text}"
 
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
+
+    payload = {
+        "contents": [
+            {
+                "parts": [
+                    {"text": prompt}
+                ]
+            }
+        ]
+    }
+
+    try:
+        r = requests.post(url, json=payload, timeout=20)
+        data = r.json()
+
+        if "error" in data:
+            return "API HATA: " + data["error"]["message"]
+
+        return data["candidates"][0]["content"]["parts"][0]["text"]
+
+    except Exception as e:
+        return str(e)
+
+# -------------------------
+# HOME
+# -------------------------
 @app.route("/")
 def index():
+    return render_template("index.html", user=session.get("user"))
 
-    kullanici = None
-
-    if "kullanici" in session:
-
-        kullanici = session["kullanici"]
-
-    return render_template(
-        "index.html",
-        kullanici=kullanici
-    )
-
-# ---------------------------------------------------
-# KAYIT OL
-# ---------------------------------------------------
-
+# -------------------------
+# REGISTER
+# -------------------------
 @app.route("/register", methods=["GET", "POST"])
 def register():
-
-    hata = ""
+    hata = None
 
     if request.method == "POST":
+        u = request.form.get("username")
+        p = request.form.get("password")
 
-        kullanici = request.form.get("kullanici")
-        sifre = request.form.get("sifre")
+        if not u or not p:
+            hata = "Boş alan bırakma"
 
-        if kullanici in kullanicilar:
-
-            hata = "Bu kullanıcı zaten var"
+        elif u in users:
+            hata = "Kullanıcı var"
 
         else:
-
-            kullanicilar[kullanici] = sifre
-
-            kaydet()
-
+            users[u] = p
+            save()
             return redirect("/login")
 
-    return render_template(
-        "register.html",
-        hata=hata
-    )
+    return render_template("register.html", hata=hata)
 
-# ---------------------------------------------------
-# GİRİŞ YAP
-# ---------------------------------------------------
-
+# -------------------------
+# LOGIN
+# -------------------------
 @app.route("/login", methods=["GET", "POST"])
 def login():
-
-    hata = ""
+    hata = None
 
     if request.method == "POST":
+        u = request.form.get("username")
+        p = request.form.get("password")
 
-        kullanici = request.form.get("kullanici")
-        sifre = request.form.get("sifre")
+        if not u or not p:
+            hata = "Boş alan bırakma"
 
-        if kullanici in kullanicilar:
-
-            if kullanicilar[kullanici] == sifre:
-
-                session["kullanici"] = kullanici
-
-                return redirect("/panel")
-
-            else:
-
-                hata = "Şifre yanlış"
-
-        else:
-
+        elif u not in users:
             hata = "Kullanıcı bulunamadı"
 
-    return render_template(
-        "login.html",
-        hata=hata
-    )
+        elif users[u] != p:
+            hata = "Şifre yanlış"
 
-# ---------------------------------------------------
+        else:
+            session["user"] = u
+            return redirect("/panel")
+
+    return render_template("login.html", hata=hata)
+
+# -------------------------
 # PANEL
-# ---------------------------------------------------
-
+# -------------------------
 @app.route("/panel")
 def panel():
+    if "user" not in session:
+        return redirect("/login")
 
-    if "kullanici" in session:
+    return render_template("panel.html", user=session["user"], chat=chats.get(session["user"], []))
 
-        return render_template(
-            "panel.html",
-            kullanici=session["kullanici"]
-        )
+# -------------------------
+# CHAT
+# -------------------------
+@app.route("/api/chat", methods=["POST"])
+def chat():
+    if "user" not in session:
+        return jsonify({"error": "not logged"}), 401
 
-    return redirect("/login")
+    u = session["user"]
+    msg = request.json.get("soru", "")
 
-# ---------------------------------------------------
-# ÇIKIŞ YAP
-# ---------------------------------------------------
+    chats.setdefault(u, []).append({"sender": "user", "text": msg})
 
+    msg_lower = msg.lower()
+
+    if "sen kimsin" in msg_lower:
+        reply = "Ben LokiAI'yim."
+
+    elif "adın ne" in msg_lower:
+        reply = "Ben LokiAI'yim."
+
+    elif "geliştiricin kim" in msg_lower:
+        reply = "Ben LokiMaskiu tarafından geliştirilen LokiAI'yim."
+
+    else:
+        reply = gemini(msg)
+
+        chats[u].append({"sender": "ai", "text": reply})
+
+        save()
+
+    return jsonify({"cevap": reply})
+
+# -------------------------
+# DELETE
+# -------------------------
+@app.route("/delete")
+def delete():
+    if "user" not in session:
+        return redirect("/login")
+
+    u = session["user"]
+
+    users.pop(u, None)
+    chats.pop(u, None)
+
+    save()
+    session.clear()
+
+    return redirect("/")
+
+# -------------------------
+# LOGOUT
+# -------------------------
 @app.route("/logout")
 def logout():
-
     session.clear()
-
     return redirect("/")
 
-# ---------------------------------------------------
-# HESAP SİL
-# ---------------------------------------------------
-
-@app.route("/delete/<kullanici>")
-def delete(kullanici):
-
-    if kullanici in kullanicilar:
-
-        del kullanicilar[kullanici]
-
-        kaydet()
-
-    session.clear()
-
-    return redirect("/")
-
-# ---------------------------------------------------
-# ÇALIŞTIR
-# ---------------------------------------------------
-
+# -------------------------
 if __name__ == "__main__":
-
     app.run(debug=True)

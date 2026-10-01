@@ -2,23 +2,19 @@
 <html lang="tr">
 
 <head>
-
     <meta charset="UTF-8">
-
     <title>LokiNet</title>
 
-    <link rel="icon" href="/static/favicon.ico">
+    <!-- ✔ FAVICON (DOĞRU VE KESİN ÇALIŞAN) -->
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
 
     <style>
-
         body{
             margin:0;
             background:#121212;
             font-family:Arial;
             color:white;
         }
-
-        /* NAVBAR */
 
         .navbar{
             background:#1f1f1f;
@@ -45,8 +41,6 @@
         .menu a:hover{
             color:#4CAF50;
         }
-
-        /* ORTA KISIM */
 
         .orta{
             text-align:center;
@@ -76,85 +70,49 @@
         .buton:hover{
             background:#45a049;
         }
-
     </style>
-
 </head>
 
 <body>
 
-    <!-- NAVBAR -->
+<div class="navbar">
 
-    <div class="navbar">
+    <div class="logo">LokiNet</div>
 
-        <div class="logo">
-            LokiNet
-        </div>
+    <div class="menu">
 
-        <div class="menu">
+        <a href="/">Ana Sayfa</a>
 
-            <a href="/">
-                Ana Sayfa
-            </a>
-
-            {% if kullanici %}
-
-            <a href="/panel">
-                Panel
-            </a>
-
-            <a href="/logout">
-                Çıkış Yap
-            </a>
-
-            {% else %}
-
-            <a href="/login">
-                Giriş Yap
-            </a>
-
-            <a href="/register">
-                Kayıt Ol
-            </a>
-
-            {% endif %}
-
-        </div>
-
-    </div>
-
-    <!-- ANA İÇERİK -->
-
-    <div class="orta">
-
-        <h1>
-            LokiNet'e Hoş Geldin
-        </h1>
-
-        <p>
-            Flask ile geliştirilmiş modern kullanıcı sistemi
-        </p>
-
-        {% if kullanici %}
-
-        <h2>
-            Hoş geldin {{ kullanici }}
-        </h2>
-
-        <a class="buton" href="/panel">
-            Panele Git
-        </a>
-
+        {% if user is defined and user %}
+            <a href="/panel">Panel</a>
+            <a href="/logout">Çıkış Yap</a>
         {% else %}
-
-        <a class="buton" href="/register">
-            Hemen Başla
-        </a>
-
+            <a href="/login">Giriş Yap</a>
+            <a href="/register">Kayıt Ol</a>
         {% endif %}
 
     </div>
+</div>
+
+<div class="orta">
+
+    <h1>LokiNet'e Hoş Geldin</h1>
+
+    <p>Flask ile geliştirilmiş modern kullanıcı sistemi</p>
+
+    {% if user is defined and user %}
+
+        <h2>Hoş geldin {{ user }}</h2>
+
+        <a class="buton" href="/panel">Panele Git</a>
+
+    {% else %}
+
+        <a class="buton" href="/register">Hemen Başla</a>
+
+    {% endif %}
+
+</div>
 
 </body>
-
 </html>

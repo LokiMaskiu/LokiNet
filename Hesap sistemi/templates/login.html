@@ -4,8 +4,9 @@
 <head>
 
 <meta charset="UTF-8">
-
 <title>Login</title>
+
+<link rel="icon" href="/static/favicon.ico">
 
 <style>
 
@@ -22,6 +23,7 @@ body{
     padding:40px;
     border-radius:15px;
     text-align:center;
+    box-shadow:0px 0px 15px black;
 }
 
 input{
@@ -30,6 +32,7 @@ input{
     margin-top:15px;
     border:none;
     border-radius:10px;
+    outline:none;
 }
 
 button{
@@ -50,6 +53,18 @@ button:hover{
 
 a{
     color:#4CAF50;
+    text-decoration:none;
+}
+
+a:hover{
+    text-decoration:underline;
+}
+
+/* 🔥 HATA */
+.error{
+    color:#ff4d4d;
+    margin-top:12px;
+    font-size:14px;
 }
 
 </style>
@@ -62,33 +77,39 @@ a{
 
 <h1>Giriş Yap</h1>
 
+<!-- ✔ BACKEND UYUMLU -->
 <form action="/login" method="POST">
 
-<input
-type="text"
-name="kullanici"
-placeholder="Kullanıcı Adı"
->
+    <input
+        type="text"
+        name="username"
+        placeholder="Kullanıcı Adı"
+        required
+    >
 
-<input
-type="password"
-name="sifre"
-placeholder="Şifre"
->
+    <input
+        type="password"
+        name="password"
+        placeholder="Şifre"
+        required
+    >
 
-<button type="submit">
-Giriş Yap
-</button>
+    <button type="submit">
+        Giriş Yap
+    </button>
 
 </form>
 
+<!-- 🔥 HATA MESAJI -->
+{% if hata %}
+    <div class="error">
+        {{ hata }}
+    </div>
+{% endif %}
+
 <br>
 
-<a href="/register">
-Kayıt Ol
-</a>
-
-<p>{{ hata }}</p>
+<a href="/register">Kayıt Ol</a>
 
 </div>
 
